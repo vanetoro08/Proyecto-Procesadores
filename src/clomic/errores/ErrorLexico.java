@@ -1,9 +1,6 @@
 package clomic.errores;
 
-/**
- * PROVISIONAL: la persona 5 hace la versión final.
- * Que conserve este constructor, linea() y detalle(), porque el léxico los usa.
- */
+/** Provisional, ya la persona 5 lo completa. */
 public class ErrorLexico extends RuntimeException {
     private final int linea;
     private final String detalle;
