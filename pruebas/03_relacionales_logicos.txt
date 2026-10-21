@@ -1,0 +1,37 @@
+~ Salida esperada:
+~ polar
+~ apolar
+~ polar
+~ polar
+~ polar
+~ apolar
+~ polar
+~ apolar
+~ polar
+~ polar
+~ apolar
+~ apolar
+~ polar
+~ apolar
+~ polar
+
+~ Los 6 relacionales con 5 y 3
+(emite (excede 5 3))
+(emite (bajo 5 3))
+(emite (excede= 5 5))
+(emite (bajo= 3 5))
+(emite (isotopo 5 5))
+(emite (isotopo! 5 5))
+
+~ Entero con real se pueden comparar: 2 y 2.0 son iguales
+(emite (isotopo 2 2.0))
+(emite (isotopo "a" "b"))
+(emite (bajo "a" "b"))
+
+~ Logicos: añadir (y), mezcla (o), inerte (no)
+(emite (añadir polar polar))
+(emite (añadir polar apolar))
+(emite (mezcla apolar apolar))
+(emite (mezcla apolar polar))
+(emite (inerte polar))
+(emite (inerte apolar))

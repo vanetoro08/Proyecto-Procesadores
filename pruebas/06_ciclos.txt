@@ -1,0 +1,57 @@
+~ Salida esperada:
+~ 0
+~ 1
+~ 2
+~ 1
+~ 2
+~ 3
+~ 4
+~ 5
+~ Suma: 15
+~ 0
+~ 1
+~ 2
+~ Salio en 3
+~ 1
+~ 3
+~ 5
+~ 1
+~ 2
+~ 4
+~ 5
+
+~ catalizador (mientras): cuenta de 0 a 2
+(elemento i 0)
+(catalizador (bajo i 3)
+  (emite i)
+  (enlace i (+ i 1)))
+
+~ cristaliza (para): el limite final es inclusivo, [k 1 5] va de 1 a 5
+(elemento suma 0)
+(cristaliza [k 1 5]
+  (emite k)
+  (enlace suma (+ suma k)))
+(emite (+ "Suma: " suma))
+
+~ precipita (romper): sale del ciclo cuando j llega a 3
+(elemento j 0)
+(catalizador polar
+  (valorar (isotopo j 3)
+    (precipita))
+  (emite j)
+  (enlace j (+ j 1)))
+(emite (+ "Salio en " j))
+
+~ sublima (continuar): salta los numeros pares y solo imprime los impares
+(cristaliza [m 1 5]
+  (valorar (isotopo (% m 2) 0)
+    (sublima))
+  (emite m))
+
+~ sublima en catalizador: salta el 3
+(elemento c 0)
+(catalizador (bajo c 5)
+  (enlace c (+ c 1))
+  (valorar (isotopo c 3)
+    (sublima))
+  (emite c))

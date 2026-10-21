@@ -1,0 +1,28 @@
+~ Salida esperada:
+~ Total: 5
+~ Pi: 3.14
+~ Listo: polar
+~ Apagado: apolar
+~ 5 manzanas
+~ Hola, Ana!
+~ Mitad: 3.5
+~ Dato: vacio
+~ Suma: 7
+
+~ String con entero, real y booleano
+(emite (+ "Total: " 5))
+(emite (+ "Pi: " 3.14))
+(emite (+ "Listo: " polar))
+(emite (+ "Apagado: " apolar))
+
+~ El string puede ir al principio o al final
+(emite (+ 5 " manzanas"))
+
+~ Varios operandos y variables
+(elemento nombre "Ana")
+(emite (+ "Hola, " nombre "!"))
+(emite (+ "Mitad: " (/ 7 2)))
+(emite (+ "Dato: " vacio))
+
+~ Con parentesis, primero se suma y luego se concatena
+(emite (+ "Suma: " (+ 3 4)))
