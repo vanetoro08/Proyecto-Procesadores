@@ -1,0 +1,8 @@
+~ Salida esperada:
+~ antes
+~ Runtime error on line 7: division by zero
+
+~ Error de ejecucion: division por cero sin ensaya que la capture
+(emite "antes")
+(emite (/ 10 0))
+(emite "despues")

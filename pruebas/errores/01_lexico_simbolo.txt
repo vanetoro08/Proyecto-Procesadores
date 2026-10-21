@@ -1,0 +1,7 @@
+~ Salida esperada:
+~ Lexical error on line 6: unrecognized symbol '#'
+
+~ Error lexico: # no es un simbolo de Clomic
+(elemento x 5)
+(elemento y #)
+(emite x)

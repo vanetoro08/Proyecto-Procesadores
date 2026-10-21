@@ -1,0 +1,10 @@
+~ Salida esperada:
+~ Greater than 5
+
+~ Ejemplo 1 del profesor
+(elemento x 20)
+
+(valorar (excede x 5)
+  (emite "Greater than 5")
+  (neutro
+    (emite "Less than or equal to 5")))

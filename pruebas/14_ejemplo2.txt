@@ -1,0 +1,17 @@
+~ Salida esperada:
+~ The sum is 43
+
+~ Ejemplo 2 del profesor: suma de los elementos de una lista
+(reaccion sumar [lista n]
+  (elemento total 0)
+  (cristaliza [i 0 (- n 1)]
+    (enlace total (+ total (capa lista i))))
+  (produce total))
+
+(elemento numeros [4 8 15 16])
+(elemento resultado (sumar numeros 4))
+
+(valorar (añadir (excede resultado 40) (bajo resultado 50))
+  (emite (+ "The sum is " resultado))
+  (neutro
+    (emite "Out of range")))

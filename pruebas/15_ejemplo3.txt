@@ -1,0 +1,26 @@
+~ Salida esperada:
+~ New balance: 70
+~ Error: Insufficient balance
+~ Operation finished
+
+~ Ejemplo 3 del profesor: clases y manejo de excepciones
+(compuesto Cuenta
+  (nucleo [titular saldo]
+    (enlace molecula.titular titular)
+    (enlace molecula.saldo saldo))
+
+  (reaccion retirar [valor]
+    (valorar (excede valor molecula.saldo)
+      (explota "Insufficient balance"))
+    (enlace molecula.saldo (- molecula.saldo valor))
+    (produce molecula.saldo)))
+
+(elemento c (sintetiza Cuenta "Ana" 100))
+
+(ensaya
+  (emite (+ "New balance: " (c.retirar 30)))
+  (emite (+ "New balance: " (c.retirar 200)))
+  (neutraliza error
+    (emite (+ "Error: " error)))
+  (residuo
+    (emite "Operation finished")))

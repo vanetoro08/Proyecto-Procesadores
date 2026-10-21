@@ -1,0 +1,45 @@
+~ Salida esperada:
+~ Ana
+~ 100
+~ Clomic Bank
+~ 125
+~ Ana: 125
+~ Luis: 50
+~ 500
+~ 125
+
+~ Clase con atributos, constructor y metodos
+(compuesto Cuenta
+  (elemento banco "Clomic Bank")
+  (elemento titular)
+  (elemento saldo)
+
+  (nucleo [nombre inicial]
+    (enlace molecula.titular nombre)
+    (enlace molecula.saldo inicial))
+
+  (reaccion depositar [valor]
+    (enlace molecula.saldo (+ molecula.saldo valor))
+    (produce molecula.saldo))
+
+  (reaccion resumen []
+    (produce (+ molecula.titular ": " molecula.saldo))))
+
+~ Dos objetos distintos de la misma clase
+(elemento a (sintetiza Cuenta "Ana" 100))
+(elemento b (sintetiza Cuenta "Luis" 50))
+
+~ Leer atributos
+(emite a.titular)
+(emite a.saldo)
+(emite a.banco)
+
+~ Llamar metodos: el deposito de a no cambia a b
+(emite (a.depositar 25))
+(emite (a.resumen))
+(emite (b.resumen))
+
+~ Cambiar un atributo desde afuera, solo en b
+(enlace b.saldo 500)
+(emite b.saldo)
+(emite a.saldo)

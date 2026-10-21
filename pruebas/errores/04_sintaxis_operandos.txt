@@ -1,0 +1,6 @@
+~ Salida esperada:
+~ Syntax error on line 6: 'excede' expects 2 operands, got 3
+
+~ Error sintactico: excede compara dos valores, aqui recibe tres
+(elemento x 5)
+(emite (excede x 3 2))
