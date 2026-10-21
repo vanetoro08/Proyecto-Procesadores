@@ -1,0 +1,45 @@
+~ Salida esperada:
+~ 8
+~ 14
+~ Hola, Ana
+~ 25
+~ 10
+~ 9
+~ 8
+~ 9
+
+~ Funciones con parametros que devuelven un valor con produce
+(reaccion doble [n]
+  (produce (* n 2)))
+
+(reaccion sumar [a b]
+  (produce (+ a b)))
+
+(reaccion saludar [nombre]
+  (produce (+ "Hola, " nombre)))
+
+(emite (doble 4))
+(emite (sumar 5 9))
+(emite (saludar "Ana"))
+
+~ Una funcion que llama a otra
+(reaccion cuadrado [n]
+  (produce (* n n)))
+
+(reaccion sumaCuadrados [a b]
+  (produce (+ (cuadrado a) (cuadrado b))))
+
+(emite (cuadrado 5))
+(emite (sumaCuadrados 1 3))
+
+~ Llamadas dentro de una expresion: 6 + 3
+(emite (+ (doble 3) (sumar 1 2)))
+
+~ produce dentro de un valorar: sale de la funcion antes de llegar al final
+(reaccion mayor [a b]
+  (valorar (excede a b)
+    (produce a))
+  (produce b))
+
+(emite (mayor 3 8))
+(emite (mayor 9 2))
