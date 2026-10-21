@@ -1,10 +1,12 @@
 package clomic.interprete;
 
 /**
- * Señales internas para salir de un ciclo desde cualquier profundidad.
+ * Señales internas para saltar desde adentro de varios bloques anidados.
  *
  * No son errores del programa Clomic: son la forma de "saltar" en Java.
- * precipita lanza Romper, sublima lanza Continuar, y el ciclo que las atrapa decide qué hacer.
+ *  - precipita lanza Romper y sublima lanza Continuar; las atrapa el ciclo más cercano.
+ *  - produce lanza Retorno con el valor; la atrapa llamarFuncion.
+ * Como NO heredan de ErrorEjecucion, neutraliza no las atrapa (y así debe ser).
  * super(null, null, false, false) evita armar la traza de pila, que aquí no sirve y es lenta.
  */
 final class Senales {
@@ -16,5 +18,14 @@ final class Senales {
 
     static final class Continuar extends RuntimeException {
         Continuar() { super(null, null, false, false); }
+    }
+
+    static final class Retorno extends RuntimeException {
+        final Object valor;
+
+        Retorno(Object valor) {
+            super(null, null, false, false);
+            this.valor = valor;
+        }
     }
 }
