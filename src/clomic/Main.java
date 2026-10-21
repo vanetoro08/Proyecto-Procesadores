@@ -14,14 +14,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 
-/**
- * Punto de entrada del intérprete Clomic.
- *
- * Uso: java -cp out clomic.Main programa.txt [--tokens]
- *
- * Si se pasa --tokens, imprime la lista de tokens y no ejecuta.
- * Encadena: Lexer → Parser → Interprete.
- */
+/** Punto de entrada: java -cp out clomic.Main programa.txt [--tokens] */
 public class Main {
 
     public static void main(String[] args) {
@@ -33,11 +26,10 @@ public class Main {
         String ruta = args[0];
         boolean soloTokens = args.length > 1 && "--tokens".equals(args[1]);
 
-        // Leer archivo en UTF-8 (por la ñ de añadir), quitando BOM si existe
+        // Leer archivo UTF-8 (quita BOM si existe)
         String codigo;
         try {
             byte[] bytes = Files.readAllBytes(Path.of(ruta));
-            // Quitar BOM UTF-8 (EF BB BF) si está presente
             if (bytes.length >= 3 && bytes[0] == (byte) 0xEF && bytes[1] == (byte) 0xBB && bytes[2] == (byte) 0xBF) {
                 byte[] sinBom = new byte[bytes.length - 3];
                 System.arraycopy(bytes, 3, sinBom, 0, sinBom.length);
@@ -52,7 +44,7 @@ public class Main {
         }
 
         try {
-            // LÉXICO
+            // Léxico
             List<Token> tokens = new Lexer(codigo).analizar();
 
             if (soloTokens) {
@@ -66,10 +58,10 @@ public class Main {
                 return;
             }
 
-            // PARSER
+            // Parser
             List<Nodo> arbol = new Parser(tokens).parsearPrograma();
 
-            // INTÉRPRETE
+            // Intérprete
             new Interprete().ejecutarPrograma(arbol);
 
         } catch (ErrorLexico e) {
