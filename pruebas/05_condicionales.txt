@@ -1,0 +1,77 @@
+~ Salida esperada:
+~ Mayor que 5
+~ Menor o igual que 5
+~ Positivo
+~ Cero
+~ Negativo
+~ Adulto con carnet
+~ Adulto sin carnet
+~ Menor de edad
+
+~ valorar con neutro (si / sino): rama verdadera
+(elemento x 20)
+(valorar (excede x 5)
+  (emite "Mayor que 5")
+  (neutro
+    (emite "Menor o igual que 5")))
+
+~ valorar con neutro: rama falsa
+(elemento y 3)
+(valorar (excede y 5)
+  (emite "Mayor que 5")
+  (neutro
+    (emite "Menor o igual que 5")))
+
+~ valorar, revalorar y neutro (si / sino si / sino)
+(elemento n 7)
+(valorar (excede n 0)
+  (emite "Positivo")
+  (revalorar (isotopo n 0)
+    (emite "Cero"))
+  (neutro
+    (emite "Negativo")))
+
+(enlace n 0)
+(valorar (excede n 0)
+  (emite "Positivo")
+  (revalorar (isotopo n 0)
+    (emite "Cero"))
+  (neutro
+    (emite "Negativo")))
+
+(enlace n -4)
+(valorar (excede n 0)
+  (emite "Positivo")
+  (revalorar (isotopo n 0)
+    (emite "Cero"))
+  (neutro
+    (emite "Negativo")))
+
+~ Condicionales anidados
+(elemento edad 25)
+(elemento carnet polar)
+(valorar (excede= edad 18)
+  (valorar carnet
+    (emite "Adulto con carnet")
+    (neutro
+      (emite "Adulto sin carnet")))
+  (neutro
+    (emite "Menor de edad")))
+
+(enlace carnet apolar)
+(valorar (excede= edad 18)
+  (valorar carnet
+    (emite "Adulto con carnet")
+    (neutro
+      (emite "Adulto sin carnet")))
+  (neutro
+    (emite "Menor de edad")))
+
+(enlace edad 15)
+(valorar (excede= edad 18)
+  (valorar carnet
+    (emite "Adulto con carnet")
+    (neutro
+      (emite "Adulto sin carnet")))
+  (neutro
+    (emite "Menor de edad")))

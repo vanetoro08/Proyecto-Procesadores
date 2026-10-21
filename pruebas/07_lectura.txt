@@ -1,0 +1,20 @@
+~ Esta prueba es interactiva: se corre a mano y se escriben 25, Ana y 3.5
+~ Salida esperada:
+~ Numero: 25
+~ Doble: 50
+~ Nombre: Ana
+~ Hola, Ana
+~ Decimal: 3.5
+~ Decimal mas 1: 4.5
+
+~ absorbe con un numero: se convierte a entero, asi que se puede multiplicar
+(elemento n (absorbe "Numero: "))
+(emite (+ "Doble: " (* n 2)))
+
+~ absorbe con texto: queda como string
+(elemento nombre (absorbe "Nombre: "))
+(emite (+ "Hola, " nombre))
+
+~ absorbe con un real: se convierte a real
+(elemento d (absorbe "Decimal: "))
+(emite (+ "Decimal mas 1: " (+ d 1)))
