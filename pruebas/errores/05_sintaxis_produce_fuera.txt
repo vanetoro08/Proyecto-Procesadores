@@ -1,0 +1,6 @@
+~ Salida esperada:
+~ Syntax error on line 6: 'produce' outside a function
+
+~ Error sintactico: produce solo puede ir dentro de una reaccion
+(emite "antes")
+(produce 5)
