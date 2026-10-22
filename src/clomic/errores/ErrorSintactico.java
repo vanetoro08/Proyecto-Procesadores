@@ -11,3 +11,4 @@ public class ErrorSintactico extends ErrorClomic {
     public ErrorSintactico(int linea, String detalle) {
         super("Syntax", linea, detalle);
     }
+}

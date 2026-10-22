@@ -11,4 +11,4 @@ public class ErrorLexico extends ErrorClomic {
     public ErrorLexico(int linea, String detalle) {
         super("Lexical", linea, detalle);
     }
-
+}
