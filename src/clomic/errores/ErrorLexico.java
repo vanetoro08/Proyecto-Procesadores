@@ -1,17 +1,14 @@
 package clomic.errores;
-
-/** Provisional, ya la persona 5 lo completa. */
-public class ErrorLexico extends RuntimeException {
-    private final int linea;
-    private final String detalle;
+/**
+ * Error del analizador léxico: un carácter que no forma ningún token válido.
+ *
+ * Ejemplos:
+ *     Lexical error on line 2: unrecognized symbol '#'
+ *     Lexical error on line 5: unterminated string
+ */
+public class ErrorLexico extends ErrorClomic {
 
     public ErrorLexico(int linea, String detalle) {
-        super("Lexical error on line " + linea + ": " + detalle);
-        this.linea = linea;
-        this.detalle = detalle;
+        super("Lexical", linea, detalle);
     }
 
-    public int linea() { return linea; }
-
-    public String detalle() { return detalle; }
-}

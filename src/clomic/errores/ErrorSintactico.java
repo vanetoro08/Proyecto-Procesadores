@@ -1,17 +1,13 @@
 package clomic.errores;
-
-/** Provisional: la persona 5 sube la versión final con esta misma firma. */
-public class ErrorSintactico extends RuntimeException {
-    private final int linea;
-    private final String detalle;
+/**
+ * Error del analizador sintáctico: los tokens son válidos pero no siguen la gramática.
+ *
+ * Ejemplos:
+ *     Syntax error on line 6: expected ')'
+ *     Syntax error on line 3: 'precipita' outside a loop
+ */
+public class ErrorSintactico extends ErrorClomic {
 
     public ErrorSintactico(int linea, String detalle) {
-        super("Syntax error on line " + linea + ": " + detalle);
-        this.linea = linea;
-        this.detalle = detalle;
+        super("Syntax", linea, detalle);
     }
-
-    public int linea() { return linea; }
-
-    public String detalle() { return detalle; }
-}
