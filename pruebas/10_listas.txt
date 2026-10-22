@@ -1,0 +1,40 @@
+~ Salida esperada:
+~ [4 8 15 16]
+~ 4
+~ 15
+~ 99
+~ [4 99 15 16]
+~ 4
+~ 0
+~ 4
+~ Luis
+~ 134
+
+~ Declarar una lista y mostrarla
+(elemento numeros [4 8 15 16])
+(emite numeros)
+
+~ Leer elementos por indice con capa (el primero es el 0)
+(emite (capa numeros 0))
+(emite (capa numeros 2))
+
+~ Cambiar un elemento: la lista se modifica en su lugar
+(enlace (capa numeros 1) 99)
+(emite (capa numeros 1))
+(emite numeros)
+
+~ masa: tamano de una lista (y de un string)
+(emite (masa numeros))
+(elemento vacia [])
+(emite (masa vacia))
+(emite (masa "hola"))
+
+~ Lista de strings
+(elemento nombres ["Ana" "Luis"])
+(emite (capa nombres 1))
+
+~ Recorrer la lista con cristaliza y masa: 4 + 99 + 15 + 16
+(elemento total 0)
+(cristaliza [i 0 (- (masa numeros) 1)]
+  (enlace total (+ total (capa numeros i))))
+(emite total)

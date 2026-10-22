@@ -1,0 +1,62 @@
+~ Salida esperada:
+~ Error: Algo salio mal
+~ Capturado: division by zero
+~ Capturado: index out of range
+~ sin error
+~ residuo 1
+~ Atrapado: falla
+~ residuo 2
+~ 70
+~ Error: Saldo insuficiente
+~ Fin
+
+~ explota: lanzar un error propio. Lo que sigue a explota no se ejecuta
+(ensaya
+  (explota "Algo salio mal")
+  (emite "esto no se imprime")
+  (neutraliza error
+    (emite (+ "Error: " error))))
+
+~ Error del sistema: division por cero
+(ensaya
+  (emite (/ 1 0))
+  (neutraliza error
+    (emite (+ "Capturado: " error))))
+
+~ Error del sistema: indice fuera de rango
+(elemento lista [1 2 3])
+(ensaya
+  (emite (capa lista 10))
+  (neutraliza error
+    (emite (+ "Capturado: " error))))
+
+~ residuo se ejecuta siempre: sin error...
+(ensaya
+  (emite "sin error")
+  (neutraliza error
+    (emite "esto no se imprime"))
+  (residuo
+    (emite "residuo 1")))
+
+~ ...y con error
+(ensaya
+  (explota "falla")
+  (neutraliza e
+    (emite (+ "Atrapado: " e)))
+  (residuo
+    (emite "residuo 2")))
+
+~ explota dentro de una funcion, capturado afuera
+(reaccion retirar [saldo valor]
+  (valorar (excede valor saldo)
+    (explota "Saldo insuficiente"))
+  (produce (- saldo valor)))
+
+(ensaya
+  (emite (retirar 100 30))
+  (emite (retirar 100 200))
+  (emite "esto no se imprime")
+  (neutraliza error
+    (emite (+ "Error: " error)))
+  (residuo
+    (emite "Fin")))

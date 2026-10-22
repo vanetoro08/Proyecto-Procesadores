@@ -1,0 +1,8 @@
+~ Salida esperada:
+~ antes
+~ Runtime error on line 7: undefined variable 'y'
+
+~ Error de ejecucion: y nunca se declaro con elemento
+(emite "antes")
+(emite y)
+(emite "despues")

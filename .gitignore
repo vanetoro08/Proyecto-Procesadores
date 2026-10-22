@@ -1,0 +1,7 @@
+out/
+*.class
+*.log
+*.tmp
+.vscode/
+.metals/
+.idea/

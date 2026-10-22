@@ -1,0 +1,7 @@
+~ Salida esperada:
+~ Lexical error on line 6: unterminated string
+
+~ Error lexico: al string le falta la comilla de cierre
+(elemento x 5)
+(emite "hola)
+(emite x)
