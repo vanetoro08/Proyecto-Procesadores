@@ -1,0 +1,29 @@
+~ Salida esperada:
+~ 5
+~ 6
+~ 12
+~ 3.5
+~ 5.0
+~ 1
+~ 14
+~ 20
+~ -5
+~ 6
+~ 2.5
+
+~ Las cinco operaciones
+(emite (+ 2 3))
+(emite (- 10 4))
+(emite (* 3 4))
+(emite (/ 7 2))
+(emite (/ 10 2))
+(emite (% 10 3))
+
+~ Precedencia con parentesis: 2 + 3 * 4 y (2 + 3) * 4
+(emite (+ 2 (* 3 4)))
+(emite (* (+ 2 3) 4))
+
+~ Negativo, varios operandos y mezcla entero con real
+(emite (- 5))
+(emite (+ 1 2 3))
+(emite (+ 2 0.5))

@@ -1,0 +1,41 @@
+~ Salida esperada:
+~ 1
+~ 120
+~ 3628800
+~ 0
+~ 1
+~ 8
+~ 55
+~ 0
+~ 1
+~ 1
+~ 2
+~ 3
+~ 5
+~ 8
+~ 13
+
+~ Factorial: una funcion que se llama a si misma
+(reaccion factorial [n]
+  (valorar (bajo= n 1)
+    (produce 1))
+  (produce (* n (factorial (- n 1)))))
+
+(emite (factorial 0))
+(emite (factorial 5))
+(emite (factorial 10))
+
+~ Fibonacci: dos llamadas recursivas en la misma expresion
+(reaccion fib [n]
+  (valorar (bajo n 2)
+    (produce n))
+  (produce (+ (fib (- n 1)) (fib (- n 2)))))
+
+(emite (fib 0))
+(emite (fib 1))
+(emite (fib 6))
+(emite (fib 10))
+
+~ Los primeros 8 terminos de la serie
+(cristaliza [i 0 7]
+  (emite (fib i)))

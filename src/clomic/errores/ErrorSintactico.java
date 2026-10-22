@@ -1,5 +1,4 @@
 package clomic.errores;
-
 /**
  * Error del analizador sintáctico: los tokens son válidos pero no siguen la gramática.
  *
@@ -12,4 +11,3 @@ public class ErrorSintactico extends ErrorClomic {
     public ErrorSintactico(int linea, String detalle) {
         super("Syntax", linea, detalle);
     }
-}

@@ -1,0 +1,36 @@
+~ Salida esperada:
+~ 20
+~ 3.14
+~ Hola
+~ polar
+~ vacio
+~ vacio
+~ 30
+~ Chao
+~ 5
+
+~ Los 4 tipos de dato, declarados con valor
+(elemento entero 20)
+(elemento real 3.14)
+(elemento texto "Hola")
+(elemento logico polar)
+(emite entero)
+(emite real)
+(emite texto)
+(emite logico)
+
+~ Declarar con vacio y declarar sin valor
+(elemento nada vacio)
+(elemento sinValor)
+(emite nada)
+(emite sinValor)
+
+~ Cambiar el valor con enlace
+(enlace entero 30)
+(emite entero)
+(enlace texto "Chao")
+(emite texto)
+
+~ Una variable sin valor se puede llenar despues
+(enlace sinValor 5)
+(emite sinValor)

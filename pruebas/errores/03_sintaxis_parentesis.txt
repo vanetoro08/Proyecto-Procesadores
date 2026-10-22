@@ -1,0 +1,7 @@
+~ Salida esperada:
+~ Syntax error on line 7: expected ')'
+
+~ Error sintactico: a (emite (+ x 1) le falta un parentesis de cierre
+(elemento x 5)
+(emite (+ x 1)
+(emite x)
