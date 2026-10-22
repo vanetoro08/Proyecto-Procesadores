@@ -1,21 +1,20 @@
 package clomic.errores;
 
 /**
- * PROVISIONAL: la persona 5 hace la versión final.
- * Que conserve este constructor, linea() y detalle(), porque el intérprete los usa.
+ * Error que ocurre mientras el programa se ejecuta.
+ *
+ * Ejemplos:
+ *     Runtime error on line 9: division by zero
+ *     Runtime error on line 4: index out of range
+ *     Runtime error on line 2: undefined variable 'y'
+ *
+ * El bloque (ensaya ... (neutraliza e ...)) atrapa este tipo de error, y la variable e
+ * recibe solo el detalle, por ejemplo "division by zero".
+ * ExcepcionClomic (la de explota) hereda de esta clase, así que se atrapa igual.
  */
-public class ErrorEjecucion extends RuntimeException {
-    private final int linea;
-    private final String detalle;
+public class ErrorEjecucion extends ErrorClomic {
 
     public ErrorEjecucion(int linea, String detalle) {
-        super("Runtime error on line " + linea + ": " + detalle);
-        this.linea = linea;
-        this.detalle = detalle;
+        super("Runtime", linea, detalle);
     }
-
-    public int linea() { return linea; }
-
-    /** Solo el texto del error, p. ej. "division by zero". Es lo que recibe neutraliza. */
-    public String detalle() { return detalle; }
 }
