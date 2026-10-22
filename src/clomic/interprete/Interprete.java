@@ -9,7 +9,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.function.BinaryOperator;
 
 /**
@@ -21,7 +23,7 @@ import java.util.function.BinaryOperator;
  *
  * Partes:
  *  - Persona 1: variables, expresiones, control de flujo, funciones y excepciones.
- *  - Persona 2: listas y clases, en los métodos marcados "PERSONA 2" al final del archivo.
+ *  - Persona 2: listas y clases, al final del archivo.
  */
 public class Interprete {
 
@@ -72,7 +74,7 @@ public class Interprete {
                 Object valor = evaluar(l.valor(), entorno);
                 throw new ExcepcionClomic(Operaciones.aTexto(valor), l.linea());
             }
-            // Clases (persona 2)
+            // Clases
             case DefClase d -> definirClase(d, entorno);
             // Una expresión suelta como sentencia, por ejemplo una llamada (saludar "Ana")
             default -> evaluar(nodo, entorno);
@@ -83,8 +85,8 @@ public class Interprete {
         Object valor = evaluar(a.valor(), entorno);
         switch (a.destino()) {
             case Variable v -> entorno.asignar(v.nombre(), valor, a.linea());
-            case Indice i -> asignarIndice(i, valor, entorno);       // persona 2
-            case Acceso ac -> asignarAtributo(ac, valor, entorno);   // persona 2
+            case Indice i -> asignarIndice(i, valor, entorno);
+            case Acceso ac -> asignarAtributo(ac, valor, entorno);
             default -> throw new ErrorEjecucion(a.linea(), "invalid assignment target");
         }
     }
@@ -176,7 +178,7 @@ public class Interprete {
         }
         switch (llamada.funcion()) {
             case Acceso metodo -> {
-                return llamarMetodo(metodo, args, llamada.linea(), entorno);  // persona 2
+                return llamarMetodo(metodo, args, llamada.linea(), entorno);
             }
             case Variable v -> {
                 Object valor = entorno.obtener(v.nombre(), v.linea());
@@ -231,7 +233,7 @@ public class Interprete {
             case Leer l -> leer(l, entorno);
             case Llamada ll -> evaluarLlamada(ll, entorno);
             case Este e -> entorno.obtener(MOLECULA, e.linea());
-            // Listas y clases (persona 2)
+            // Listas y clases
             case ListaLit l -> crearLista(l, entorno);
             case Indice i -> leerIndice(i, entorno);
             case Tamano t -> tamano(t, entorno);
@@ -325,61 +327,151 @@ public class Interprete {
     }
 
     // =====================================================================
-    //  PERSONA 2: LISTAS
-    //  Llenar el cuerpo de cada método SIN cambiar su nombre ni sus parámetros.
+    //  LISTAS (persona 2)
     // =====================================================================
 
-    /** [4 8 15]: evaluar cada elemento y devolver un ArrayList nuevo (modificable). */
+    /** [4 8 15]: evaluar cada elemento y devolver un ArrayList nuevo (modificable, a diferencia de List.of). */
     private Object crearLista(ListaLit l, Entorno entorno) {
-        throw pendiente(l);
+        List<Object> lista = new ArrayList<>();
+        for (Nodo elemento : l.elementos()) {
+            lista.add(evaluar(elemento, entorno));
+        }
+        return lista;
     }
 
-    /** (capa lista i): índice desde 0. Fuera de rango: "index out of range". */
+    /** (capa lista i): índice desde 0. */
     private Object leerIndice(Indice i, Entorno entorno) {
-        throw pendiente(i);
+        List<Object> lista = comoLista(evaluar(i.lista(), entorno), i.linea());
+        int posicion = posicionValida(lista, evaluar(i.posicion(), entorno), i.linea());
+        return lista.get(posicion);
     }
 
-    /** (enlace (capa lista i) valor): cambia el elemento con set, con las mismas validaciones. */
+    /** (enlace (capa lista i) valor): cambia el elemento en su lugar. */
     private void asignarIndice(Indice destino, Object valor, Entorno entorno) {
-        throw pendiente(destino);
+        List<Object> lista = comoLista(evaluar(destino.lista(), entorno), destino.linea());
+        int posicion = posicionValida(lista, evaluar(destino.posicion(), entorno), destino.linea());
+        lista.set(posicion, valor);
     }
 
-    /** (masa lista): usar Operaciones.tamano. */
+    /** (masa lista): cantidad de elementos, o de letras si es un string. */
     private Object tamano(Tamano t, Entorno entorno) {
-        throw pendiente(t);
+        return Operaciones.tamano(evaluar(t.lista(), entorno), t.linea());
+    }
+
+    @SuppressWarnings("unchecked")
+    private List<Object> comoLista(Object valor, int linea) {
+        if (valor instanceof List<?> lista) {
+            return (List<Object>) lista;
+        }
+        throw new ErrorEjecucion(linea, "expected a list but got " + tipoDe(valor));
+    }
+
+    /** El índice tiene que ser entero y estar entre 0 y tamaño - 1. El texto del error es el que recibe neutraliza. */
+    private int posicionValida(List<Object> lista, Object indice, int linea) {
+        long posicion = Operaciones.entero(indice, linea);
+        if (posicion < 0 || posicion >= lista.size()) {
+            throw new ErrorEjecucion(linea, "index out of range");
+        }
+        return (int) posicion;
     }
 
     // =====================================================================
-    //  PERSONA 2: CLASES
-    //  Para el constructor y los métodos usar llamarFuncion(def, args, objeto, linea).
+    //  CLASES (persona 2)
     // =====================================================================
 
-    /** (compuesto Cuenta ...): armar la ClaseClomic y guardarla en el entorno con su nombre. */
+    /**
+     * (compuesto Cuenta ...): arma la ClaseClomic y la guarda en el entorno con su nombre.
+     * El constructor se guarda con el nombre de la clase para que, si llegan mal los argumentos,
+     * el error diga 'Cuenta' expects 2 arguments en vez de 'nucleo' expects 2 arguments.
+     */
     private void definirClase(DefClase d, Entorno entorno) {
-        throw pendiente(d);
+        Map<String, DefFuncion> metodos = new LinkedHashMap<>();
+        for (DefFuncion metodo : d.metodos()) {
+            metodos.put(metodo.nombre(), metodo);
+        }
+        DefFuncion constructor = null;
+        if (d.constructor() != null) {
+            DefFuncion c = d.constructor();
+            constructor = new DefFuncion(d.nombre(), c.params(), c.cuerpo(), c.linea());
+        }
+        entorno.definir(d.nombre(), new ClaseClomic(d.nombre(), d.atributos(), constructor, metodos));
     }
 
-    /** (sintetiza Cuenta args...): crear el objeto, poner atributos y llamar al constructor. */
+    /**
+     * (sintetiza Cuenta "Ana" 100):
+     * 1. busca la clase,
+     * 2. crea el objeto vacío,
+     * 3. le pone los atributos declarados con elemento (con su valor inicial o vacio),
+     * 4. llama al constructor con el objeto como molecula.
+     */
     private Object crearObjeto(Nuevo n, Entorno entorno) {
-        throw pendiente(n);
+        Object valor = entorno.obtener(n.clase(), n.linea());
+        if (!(valor instanceof ClaseClomic clase)) {
+            throw new ErrorEjecucion(n.linea(), "'" + n.clase() + "' is not a class");
+        }
+        ObjetoClomic objeto = new ObjetoClomic(clase);
+        for (Declaracion atributo : clase.atributos()) {
+            Object inicial = (atributo.valor() == null) ? null : evaluar(atributo.valor(), entorno);
+            objeto.poner(atributo.nombre(), inicial);
+        }
+
+        List<Object> args = new ArrayList<>();
+        for (Nodo a : n.args()) {
+            args.add(evaluar(a, entorno));
+        }
+        if (clase.constructor() != null) {
+            llamarFuncion(clase.constructor(), args, objeto, n.linea());
+        } else if (!args.isEmpty()) {
+            throw new ErrorEjecucion(n.linea(), "'" + clase.nombre() + "' has no constructor");
+        }
+        return objeto;
     }
 
     /** c.saldo / molecula.saldo */
     private Object leerAtributo(Acceso a, Entorno entorno) {
-        throw pendiente(a);
+        ObjetoClomic objeto = comoObjeto(evaluar(a.objeto(), entorno), a.linea());
+        if (!objeto.tieneAtributo(a.atributo())) {
+            throw new ErrorEjecucion(a.linea(),
+                    "'" + objeto.clase().nombre() + "' has no attribute '" + a.atributo() + "'");
+        }
+        return objeto.obtener(a.atributo());
     }
 
-    /** (enlace c.saldo valor): crea el atributo si no existe. */
+    /** (enlace molecula.saldo valor): crea el atributo si no existe, como hace el constructor del ejemplo 3. */
     private void asignarAtributo(Acceso destino, Object valor, Entorno entorno) {
-        throw pendiente(destino);
+        ObjetoClomic objeto = comoObjeto(evaluar(destino.objeto(), entorno), destino.linea());
+        objeto.poner(destino.atributo(), valor);
     }
 
-    /** (c.retirar 30): los argumentos ya vienen evaluados. */
+    /** (c.retirar 30): busca el método en la clase del objeto y lo llama con el objeto como molecula. */
     private Object llamarMetodo(Acceso metodo, List<Object> args, int linea, Entorno entorno) {
-        throw pendiente(metodo);
+        ObjetoClomic objeto = comoObjeto(evaluar(metodo.objeto(), entorno), linea);
+        DefFuncion f = objeto.clase().metodos().get(metodo.atributo());
+        if (f == null) {
+            throw new ErrorEjecucion(linea,
+                    "'" + objeto.clase().nombre() + "' has no method '" + metodo.atributo() + "'");
+        }
+        return llamarFuncion(f, args, objeto, linea);
     }
 
-    private ErrorEjecucion pendiente(Nodo nodo) {
-        return new ErrorEjecucion(nodo.linea(), "not implemented yet: " + nodo.getClass().getSimpleName());
+    private ObjetoClomic comoObjeto(Object valor, int linea) {
+        if (valor instanceof ObjetoClomic objeto) {
+            return objeto;
+        }
+        throw new ErrorEjecucion(linea, "expected an object but got " + tipoDe(valor));
+    }
+
+    /** Nombre del tipo para los mensajes de error. */
+    private static String tipoDe(Object v) {
+        if (v == null) return "vacio";
+        if (v instanceof Long) return "integer";
+        if (v instanceof Double) return "real";
+        if (v instanceof String) return "string";
+        if (v instanceof Boolean) return "boolean";
+        if (v instanceof List) return "list";
+        if (v instanceof ObjetoClomic o) return "object " + o;
+        if (v instanceof ClaseClomic) return "class";
+        if (v instanceof DefFuncion) return "function";
+        return v.getClass().getSimpleName();
     }
 }
