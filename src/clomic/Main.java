@@ -14,7 +14,13 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 
-/** Punto de entrada: java -cp out clomic.Main programa.txt [--tokens] */
+/**
+ * Punto de entrada: java -cp out clomic.Main programa.txt [--tokens]
+ *
+ * Lee el .txt, hace el análisis léxico (y con --tokens imprime los tokens),
+ * el análisis sintáctico y la ejecución. Todos los errores salen por System.out
+ * para que no se impriman en desorden con la salida del programa.
+ */
 public class Main {
 
     public static void main(String[] args) {
@@ -24,7 +30,7 @@ public class Main {
         }
 
         String ruta = args[0];
-        boolean soloTokens = args.length > 1 && "--tokens".equals(args[1]);
+        boolean verTokens = args.length > 1 && "--tokens".equals(args[1]);
 
         // Leer archivo UTF-8 (quita BOM si existe)
         String codigo;
@@ -47,15 +53,9 @@ public class Main {
             // Léxico
             List<Token> tokens = new Lexer(codigo).analizar();
 
-            if (soloTokens) {
-                for (Token token : tokens) {
-                    if (token.tipo() == clomic.lexer.TipoToken.EOF) {
-                        System.out.println("[line " + token.linea() + "] EOF");
-                    } else {
-                        System.out.println("[line " + token.linea() + "] " + token.tipo() + " " + token.lexema());
-                    }
-                }
-                return;
+            if (verTokens) {
+                Lexer.imprimirTokens(tokens);
+                System.out.println("----------");
             }
 
             // Parser
@@ -65,13 +65,17 @@ public class Main {
             new Interprete().ejecutarPrograma(arbol);
 
         } catch (ErrorLexico e) {
-            System.err.println(e.getMessage());
+            System.out.println(e.getMessage());
             System.exit(1);
         } catch (ErrorSintactico e) {
-            System.err.println(e.getMessage());
+            System.out.println(e.getMessage());
             System.exit(1);
         } catch (ErrorEjecucion e) {
-            System.err.println(e.getMessage());
+            System.out.println(e.getMessage());
+            System.exit(1);
+        } catch (RuntimeException | StackOverflowError e) {
+            // Cualquier error inesperado de Java: mensaje corto, sin la traza
+            System.out.println("Runtime error: " + e);
             System.exit(1);
         }
     }
